@@ -1,0 +1,42 @@
+#!/usr/bin/with-contenv bash
+
+if [ "$branch" == "v2-develop" ] || [ "$branch" == "develop" ] || [ "$branch" == "dev" ]; then
+  echo "v2-develop" > Docker.txt
+elif [ "$branch" == "v2-master" ] || [ "$branch" == "master" ]; then
+  echo "v2-master" > Docker.txt
+else
+  echo "$branch is not a valid branch, exiting"
+  exit 1
+fi
+
+# Fetch site or update existing
+if [[ ! -d /config/www/Dashboard/.git ]]; then
+  echo '-----------------------'
+  echo '| Installing Organizr |'
+  echo '-----------------------'
+  mkdir -p /config/www/Dashboard
+  git clone --progress --verbose -b "$(cat Docker.txt)" https://github.com/causefx/Organizr /config/www/Dashboard || exit 1
+  cd /config/www/Dashboard || (echo 'Failed to load Organizr repository folder'; exit)
+  git rev-parse HEAD > /config/www/Dashboard/Github.txt
+elif [[ -d /config/www/Dashboard/.git ]]; then
+  echo '-----------------------'
+  echo '|  Updating Organizr  |'
+  echo '-----------------------'
+  cd /config/www/Dashboard || (echo 'Failed to load Organizr repository folder'; exit 0)
+  git fetch
+  git reset --hard origin/"$(cat Docker.txt)"
+  git checkout "$(cat Docker.txt)"
+  git reset --hard origin/"$(cat Docker.txt)"
+  git pull
+  git rev-parse HEAD > /config/www/Dashboard/Github.txt
+elif ! ping -c 1 https://github.com &> /dev/null ; then
+  echo "Git clone failed, but github is resolvable"
+else
+  echo "Git clone failed"
+fi
+
+cp /Docker.txt /config/www/Dashboard/Docker.txt || (echo 'Failed to move Docker flag'; exit 1)
+
+# Set Permissions
+chown -R abc:abc \
+  /config
