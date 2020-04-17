@@ -1,5 +1,5 @@
 ARG BASE_IMAGE
-FROM ${BASE_IMAGE:-roxedus/base:2020-04-11_20.57}
+FROM ${BASE_IMAGE:-organizr/base:2020-04-17_22}
 
 LABEL maintainer="christronyxyocum,Roxedus"
 
