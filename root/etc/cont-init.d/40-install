@@ -4,12 +4,18 @@ if [ "$branch" == "v2-develop" ] || [ "$branch" == "develop" ] || [ "$branch" ==
   echo "v2-develop" > Docker.txt
 elif [ "$branch" == "v2-master" ] || [ "$branch" == "master" ]; then
   echo "v2-master" > Docker.txt
+elif [ "$branch" == "manual" ]; then
+  echo "Autoupdater disabled (not recomended)"
+  echo "v2-master" > Docker.txt
 else
   echo "$branch is not a valid branch, exiting"
   exit 1
 fi
 
 # Fetch site or update existing
+if [ "$branch" == "manual" ]; then
+  echo "Skipping update"
+fi
 if [[ ! -d /config/www/Dashboard/.git ]]; then
   echo '-----------------------'
   echo '| Installing Organizr |'
@@ -18,7 +24,7 @@ if [[ ! -d /config/www/Dashboard/.git ]]; then
   git clone --progress --verbose -b "$(cat Docker.txt)" https://github.com/causefx/Organizr /config/www/Dashboard || exit 1
   cd /config/www/Dashboard || (echo 'Failed to load Organizr repository folder'; exit)
   git rev-parse HEAD > /config/www/Dashboard/Github.txt
-elif [[ -d /config/www/Dashboard/.git ]]; then
+elif [[ -d /config/www/Dashboard/.git ]] || [ "$branch" == "manual" ]; then
   echo '-----------------------'
   echo '|  Updating Organizr  |'
   echo '-----------------------'
@@ -35,7 +41,7 @@ else
   echo "Git clone failed"
 fi
 
-cp /Docker.txt /config/www/Dashboard/Docker.txt || (echo 'Failed to move Docker flag'; exit 1)
+cp /Docker.txt /config/www/Dashboard/Docker.txt || (echo 'Failed to move Docker flag, are you running with the updater disabled?'; exit 0)
 
 # Set Permissions
 chown -R abc:abc \
