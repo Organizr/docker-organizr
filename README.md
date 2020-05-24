@@ -48,6 +48,10 @@ In this instance `PUID=1001` and `PGID=1001`. To find yours use `id user` as bel
     uid=1001(dockeruser) gid=1001(dockergroup) groups=1001(dockergroup)
 ```
 
+## .original and .rework files
+
+Sometimes we change files that is used by the container, in this case we backup your old files, and replace them with the new ones.
+
 ## Multi-arch
 
 Manifested docker images built with buildkit.
