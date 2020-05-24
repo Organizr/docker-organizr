@@ -41,6 +41,11 @@ else
   echo "Git clone failed"
 fi
 
+if [ ! "$branch" == "manual" ]; then
+  # Make sure the config.php file is using the correct branch
+  sed -i "s/'branch' => '[^']*',/'branch' =\> $branch,/" /config/www/Dashboard/api/config/config.php
+fi
+
 cp /Docker.txt /config/www/Dashboard/Docker.txt || (echo 'Failed to move Docker flag, are you running with the updater disabled?'; exit 0)
 
 # Set Permissions
