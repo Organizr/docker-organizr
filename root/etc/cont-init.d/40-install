@@ -15,8 +15,7 @@ fi
 # Fetch site or update existing
 if [ "$branch" == "manual" ]; then
   echo "Skipping update"
-fi
-if [[ ! -d /config/www/Dashboard/.git ]]; then
+elif [[ ! -d /config/www/Dashboard/.git ]]; then
   echo '-----------------------'
   echo '| Installing Organizr |'
   echo '-----------------------'
@@ -27,7 +26,7 @@ if [[ ! -d /config/www/Dashboard/.git ]]; then
     exit
   )
   git rev-parse HEAD >/config/www/Dashboard/Github.txt
-elif [[ -d /config/www/Dashboard/.git ]] || [ "$branch" == "manual" ]; then
+elif [[ -d /config/www/Dashboard/.git ]]; then
   echo '-----------------------'
   echo '|  Updating Organizr  |'
   echo '-----------------------'
