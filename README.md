@@ -76,5 +76,5 @@ Setup accounts, service tabs, etc. via the webUI. More info can be found on the 
 ### Credits
 
 * [causefx](https://github.com/causefx) - The man behind Organizr
-* [Chris Yocum](https://github.com/christronyxyocum) - For creating, and maintainig the original container
+* [Chris Yocum](https://github.com/christronyxyocum) - For creating, and maintaining the original container
 * [Roxedus](https://github.com/roxedus) - For updating and redoing the CI pipeline and container
