@@ -64,6 +64,18 @@ Supported architetures:
 | arm64 | arm64 |
 | armhf | arm |
 
+## Migration
+
+This should be a drop-in replacement coming from `organizrtools/organizr-v2`. It has worked in all our tests.
+
+Key-changes:
+
+* The nginx config file for the healthcheck is moved to it's own file, under `/config/nginx/site-confs/healthcheck`.
+
+* Moving the install directory from `/config/www/Dashboard` to `/config/www/organizr`, Nginx should also be updated with this change.
+
+* One tag. While we could have set PHP to use the unix socket as default, we opted to using a environment varible. We also moved the branch selector to be a environment variable.
+
 ## Setting up the application
 
 Setup accounts, service tabs, etc. via the webUI. More info can be found on the official [Organizr GitHub repository](https://github.com/causefx/Organizr/).
