@@ -22,11 +22,16 @@ server {
     try_files $uri $uri/ /index.html /index.php?$args =404;
   }
 
+  location /api/v2 {
+    try_files $uri /api/v2/index.php$is_args$args;
+  }
+
   location ~ \.php$ {
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
     fastcgi_pass 127.0.0.1:9000;
     fastcgi_index index.php;
     include /etc/nginx/fastcgi_params;
-
+    fastcgi_buffers 32 32k;
+    fastcgi_buffer_size 32k;
   }
 }
