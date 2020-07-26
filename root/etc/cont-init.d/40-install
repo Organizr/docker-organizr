@@ -26,8 +26,7 @@ if [[ -d /config/www/Dashboard ]]; then
 fi
 
 if [[ $(grep -c "location /api/v2 {" /config/nginx/site-confs/default) -eq 0 ]] &&
-  [[ $(grep -c "# V0.0.2" /config/nginx/site-confs/default) -eq 1 ]] || # Oops
-  [[ $(grep -c "# V0.0.3" /config/nginx/site-confs/default) -eq 1 ]]; then
+  [[ $(grep -c "# V0.0.2" /config/nginx/site-confs/default) -eq 1 || $(grep -c "# V0.0.3" /config/nginx/site-confs/default) -eq 1 ]]; then
   sed -i $'s|location ~ \\\.php$ {|location /api/v2 {\\\n    try_files $uri /api/v2/index.php$is_args$args;\\\n  }\\\n\\\n  location ~ \\\.php$ {|g' /config/nginx/site-confs/default
   sed -i $'s|# V0.0.4|# V0.0.3|g' /config/nginx/site-confs/default # Oops
   sed -i $'s|# V0.0.3|# V0.0.4|g' /config/nginx/site-confs/default
