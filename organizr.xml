@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Container version="2">
+    <Name>organizrv2</Name>
+    <Repository>organizr/organizr</Repository>
+    <Registry>https://hub.docker.com/r/organizr/organizr/</Registry>
+    <Shell>bash</Shell>
+    <Privileged>false</Privileged>
+    <Support/>
+    <Project>https://github.com/causefx/Organizr</Project>
+    <Overview>Your mediaservers one-stop shop[br]HTPC/Homelab Services Organizer - Written in PHP[br]The new Official image for Organzir v2.</Overview>
+    <Category>HomeAutomation: Network:Management MediaApp:Other MediaServer:Other Productivity: Tools:</Category>
+    <WebUI>http://[IP]:[PORT:80]/</WebUI>
+    <TemplateURL>https://raw.githubusercontent.com/organizr/docker-organizr/master/organizr.xml</TemplateURL>
+    <Icon>https://raw.githubusercontent.com/causefx/Organizr/v2-master/plugins/images/organizr/logo-no-border.png</Icon>
+    <DonateText>Donations</DonateText>
+    <DonateLink>https://paypal.me/causefx</DonateLink>
+    <Description>HTPC/Homelab Services Organizer - Written in PHP</Description>
+    <Config Name="Branch" Target="branch" Default="master|develop" Description="Chooses which branch of organizr you wish to use" Type="Variable" Display="always" Required="false" Mask="false"/>
+    <Config Name="Fpm" Target="fpm" Default="false|true" Description="Sets the required changes to use php over a unix socket" Type="Variable" Display="advanced" Required="false" Mask="false"/>
+    <Config Name="AppData Config Path" Target="/config" Default="/mnt/user/appdata/organizr" Mode="rw" Description="Container Path: /config" Type="Path" Display="advanced" Required="true" Mask="false"/>
+    <Config Name="PUID" Target="PUID" Default="99" Mode="" Description="Variable: PUID" Type="Variable" Display="advanced-hide" Required="true" Mask="false">99</Config>
+    <Config Name="PGID" Target="PGID" Default="100" Mode="" Description="Variable: PGID" Type="Variable" Display="advanced-hide" Required="true" Mask="false">100</Config>
+</Container>
