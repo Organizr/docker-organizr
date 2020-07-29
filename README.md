@@ -76,6 +76,15 @@ Key-changes:
 
 * One tag. While we could have set PHP to use the unix socket as default, we opted to using a environment varible. We also moved the branch selector to be a environment variable.
 
+| Old | New |
+| ---- | --- |
+| `organizrtools/organizr-v2` | `organizr/organizr` |
+| `organizrtools/organizr-v2:dev` | `-e branch=dev organizr/organizr` |
+| `organizrtools/organizr-v2:php-fpm` | `-e fpm=true organizr/organizr` |
+| `organizrtools/organizr-v2:dev-php-fpm` | `-e branch=dev -e fpm=true organizr/organizr` |
+
+* `organizrtools/organizr-v2:plex` and `organizrtools/organizr-v2:dev-plex` does not have a migration path.
+
 ## Setting up the application
 
 Setup accounts, service tabs, etc. via the webUI. More info can be found on the official [Organizr GitHub repository](https://github.com/causefx/Organizr/).
