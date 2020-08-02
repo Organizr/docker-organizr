@@ -6,9 +6,9 @@
     <Shell>bash</Shell>
     <Privileged>false</Privileged>
     <Network>bridge</Network>
-    <Support/>
+    <Support>https://forums.unraid.net/topic/95443-support-organzir-organizr/<Support/>
     <Project>https://github.com/causefx/Organizr</Project>
-    <Overview>Your mediaservers one-stop shop[br]HTPC/Homelab Services Organizer - Written in PHP[br]The new Official image for Organzir v2.</Overview>
+    <Overview>Your Media Server's one-stop shop! HTPC/Homelab services organizer, written in PHP. The new, upgraded official image for Organzir v2. </Overview>
     <Category>HomeAutomation: Network:Management MediaApp:Other MediaServer:Other Productivity: Tools:</Category>
     <WebUI>http://[IP]:[PORT:80]/</WebUI>
     <TemplateURL>https://raw.githubusercontent.com/organizr/docker-organizr/master/organizr.xml</TemplateURL>
@@ -18,6 +18,7 @@
     <Description>HTPC/Homelab Services Organizer - Written in PHP</Description>
     <Config Name="Branch" Target="branch" Default="master|develop" Description="Chooses which branch of organizr you wish to use" Type="Variable" Display="always" Required="false" Mask="false"/>
     <Config Name="Fpm" Target="fpm" Default="false|true" Description="Sets the required changes to use php over a unix socket" Type="Variable" Display="advanced" Required="false" Mask="false"/>
+    <Config Name="WebUI" Target="80" Default="" Mode="tcp" Description="Container Port: 80" Type="Port" Display="always" Required="false" Mask="false"/>
     <Config Name="AppData Config Path" Target="/config" Default="/mnt/user/appdata/organizr" Mode="rw" Description="Container Path: /config" Type="Path" Display="advanced" Required="true" Mask="false"/>
     <Config Name="PUID" Target="PUID" Default="99" Mode="" Description="Variable: PUID" Type="Variable" Display="advanced-hide" Required="true" Mask="false">99</Config>
     <Config Name="PGID" Target="PGID" Default="100" Mode="" Description="Variable: PGID" Type="Variable" Display="advanced-hide" Required="true" Mask="false">100</Config>
