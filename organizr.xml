@@ -5,6 +5,7 @@
     <Registry>https://hub.docker.com/r/organizr/organizr/</Registry>
     <Shell>bash</Shell>
     <Privileged>false</Privileged>
+    <Network>bridge</Network>
     <Support/>
     <Project>https://github.com/causefx/Organizr</Project>
     <Overview>Your mediaservers one-stop shop[br]HTPC/Homelab Services Organizer - Written in PHP[br]The new Official image for Organzir v2.</Overview>
