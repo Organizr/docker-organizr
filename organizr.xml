@@ -6,7 +6,7 @@
     <Shell>bash</Shell>
     <Privileged>false</Privileged>
     <Network>bridge</Network>
-    <Support>https://forums.unraid.net/topic/95443-support-organzir-organizr/<Support/>
+    <Support>https://forums.unraid.net/topic/95443-support-organzir-organizr/</Support>
     <Project>https://github.com/causefx/Organizr</Project>
     <Overview>Your Media Server's one-stop shop! HTPC/Homelab services organizer, written in PHP. The new, upgraded official image for Organzir v2. </Overview>
     <Category>HomeAutomation: Network:Management MediaApp:Other MediaServer:Other Productivity: Tools:</Category>
