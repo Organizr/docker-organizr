@@ -12,7 +12,7 @@
     <Category>HomeAutomation: Network:Management MediaApp:Other MediaServer:Other Productivity: Tools:</Category>
     <WebUI>http://[IP]:[PORT:80]/</WebUI>
     <TemplateURL>https://raw.githubusercontent.com/organizr/docker-organizr/master/organizr.xml</TemplateURL>
-    <Icon>https://raw.githubusercontent.com/causefx/Organizr/v2-master/plugins/images/organizr/logo-no-border.png</Icon>
+    <Icon>https://github.com/Organizr/docker-organizr/raw/master/logo.gif</Icon>
     <DonateText>Donations</DonateText>
     <DonateLink>https://paypal.me/causefx</DonateLink>
     <Description>HTPC/Homelab Services Organizer - Written in PHP</Description>
