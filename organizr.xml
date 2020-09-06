@@ -16,7 +16,7 @@
     <DonateText>Donations</DonateText>
     <DonateLink>https://paypal.me/causefx</DonateLink>
     <Description>HTPC/Homelab Services Organizer - Written in PHP</Description>
-    <Config Name="Branch" Target="branch" Default="master|develop" Description="Chooses which branch of organizr you wish to use" Type="Variable" Display="always" Required="false" Mask="false"/>
+    <Config Name="Branch" Target="branch" Default="master|develop" Description="Chooses which branch of organizr you wish to use" Type="Variable" Display="always" Required="false" Mask="false">master</Config>
     <Config Name="Fpm" Target="fpm" Default="false|true" Description="Sets the required changes to use php over a unix socket" Type="Variable" Display="advanced" Required="false" Mask="false"/>
     <Config Name="WebUI" Target="80" Default="" Mode="tcp" Description="Container Port: 80" Type="Port" Display="always" Required="false" Mask="false"/>
     <Config Name="AppData Config Path" Target="/config" Default="/mnt/user/appdata/organizr" Mode="rw" Description="Container Path: /config" Type="Path" Display="advanced" Required="true" Mask="false"/>
