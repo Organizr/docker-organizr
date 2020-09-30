@@ -17,8 +17,8 @@ docker create \
   -v <path to data>:/config \
   -e PGID=<gid> -e PUID=<uid>  \
   -p 80:80 \
-  -e fpm="false" \ # optional
-  -e branch="v2-master" \ # optional
+  -e fpm="false" `#optional` \
+  -e branch="v2-master" `#optional` \
   organizr/organizr
 ```
 
@@ -33,7 +33,7 @@ The parameters are split into two halves, separated by a colon, the left hand si
 * `-e PGID` Used for GroupID - see below for explanation
 * `-e PUID` Used for UserID - see below for explanation
 * `-e fpm` Used to enable php to use the socket rather than TCP, often increases performance. Valid values are(comma separated) `true, false`
-* `-e branch` Used to switched between branches of organizr. Valid values are(comma separated) `v2-master, master, v2-develop, develop, dev`
+* `-e branch` Used to switch between branches of organizr. Valid values are(comma separated) `v2-master, master, v2-develop, develop, dev`. v2-master and master will yield the v2-master branch. v2-develop, develop and dev will yield the v2-develop branch
 
 It is based on Alpine Linux with an s6 overlay.
 
