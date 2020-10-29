@@ -7,86 +7,97 @@ on:
       - ".github/workflows/build.yml"
 
 jobs:
-  build-and-push-container:
-    runs-on: ubuntu-latest
-
-    env:
-      BUILDKIT_HOST: tcp://0.0.0.0:1234
-      DOCKER_CLI_EXPERIMENTAL: enabled
-      PLATFORM_1: amd64
-      PLATFORM_2: arm
-      PLATFORM_3: arm64
+  build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        architecture: [linux-arm-v7, linux-arm64, linux-amd64]
 
     steps:
       - uses: actions/checkout@v2
       - name: Create VARS
-        env:
-          _repo: ${{github.repository}}
-          _ref: ${{github.ref}}
         id: vars
         run: |
-          brnch=$(echo ${_ref} | cut -d/ -f3)
-          if [ "$brnch" == "master" ]; then
-            branch=""
-          else
-            branch="${brnch}-"
-          fi
-          echo "::set-output name=branch::${branch}"
-          echo "::set-output name=username::$(echo ${_repo} | cut -d/ -f1 | tr '[:upper:]' '[:lower:]')"
-          echo "::set-output name=repo::$(echo ${_repo//docker-/} | tr '[:upper:]' '[:lower:]')"
+          ARCHITECTURE=${{ matrix.architecture }}
+          echo "::set-output name=platform::${ARCHITECTURE//-/\/}"
+          echo "::set-output name=repo::$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')"
+          echo "::set-output name=time::$(date --utc +%Y-%m-%d_%H)"
+          echo "::set-output name=source::${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_REF//refs\/heads\//}"
+          echo "::set-output name=url::${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/master/README.md"
+          echo "::set-output name=tag::$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]'):${{ matrix.architecture }}"
 
-      - name: Getting buildkit
-        run: |
-          sudo docker run --privileged linuxkit/binfmt:v0.7
-          sudo docker run -d --privileged -p 1234:1234 --name buildkit moby/buildkit:latest --addr ${BUILDKIT_HOST} \
-          --oci-worker-platform linux/${PLATFORM_1} \
-          --oci-worker-platform linux/${PLATFORM_2} \
-          --oci-worker-platform linux/${PLATFORM_3}
-          sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Build amd64
-        run: |
-          buildctl build --frontend dockerfile.v0 \
-          --opt platform=linux/${PLATFORM_1} \
-          --output type=docker,name=${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_1} \
-          --local dockerfile=. \
-          --local context=. | docker load
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+          version: latest
+          driver-opts: image=moby/buildkit:master
 
-      - name: Build armhf
-        run: |
-          buildctl build --frontend dockerfile.v0 \
-          --opt platform=linux/${PLATFORM_2} \
-          --output type=docker,name=${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_2} \
-          --local dockerfile=. \
-          --local context=. | docker load
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: roxedus
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: Build arm64
-        run: |
-          buildctl build --frontend dockerfile.v0 \
-          --opt platform=linux/${PLATFORM_3} \
-          --output type=docker,name=${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_3} \
-          --local dockerfile=. \
-          --local context=. | docker load
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: roxedus
+          password: ${{ secrets.PERSONAL_TOKEN }}
 
-      - name: Login to registry
-        if: github.event.issue.pull_request != 'false'
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          platforms: ${{ steps.vars.outputs.platform }}
+          file: ./Dockerfile
+          tags: |
+            ${{ steps.vars.outputs.tag }}
+            ghcr.io/${{ steps.vars.outputs.tag }}
+          labels: |
+            org.opencontainers.image.created=${{ steps.vars.outputs.time }}
+            org.opencontainers.image.source=${{ steps.vars.outputs.source }}
+            org.opencontainers.image.url=${{ steps.vars.outputs.url }}
+
+  publish:
+    runs-on: ubuntu-20.04
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: roxedus
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: roxedus
+          password: ${{ secrets.PERSONAL_TOKEN }}
+
+      - name: Create manifests for DockerHub
         env:
-          DOCKER_USERNAME: roxedus
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-
-      - name: Publish images
-        if: github.event.issue.pull_request != 'false'
+          DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
-          docker push ${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_1}
-          docker push ${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_2}
-          docker push ${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_3}
+          IMAGE=$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')
+          SOURCE=${IMAGE}
 
-      - name: Create latest manifest
-        if: github.event.issue.pull_request != 'false' && github.ref == 'refs/heads/master'
+          docker manifest create ${IMAGE}:latest    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest
+
+      - name: Create manifests for GitHub Container Registry
+        env:
+          DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
-          docker manifest create ${{ steps.vars.outputs.repo }}:latest \
-            ${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_1} \
-            ${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_2} \
-            ${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.branch }}${PLATFORM_3}
-          docker manifest push ${{ steps.vars.outputs.repo }}:latest
+          IMAGE=ghcr.io/$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')
+          SOURCE=${IMAGE}
+
+          docker manifest create ${IMAGE}:latest    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest
