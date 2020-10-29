@@ -22,6 +22,8 @@ docker create \
   organizr/organizr
 ```
 
+This image is also available in GitHubs Container Registry at `ghcr.io/organizr/organizr`
+
 Entries marked with `optional` is showing the default value
 
 ## Parameters
@@ -60,9 +62,9 @@ Supported architetures:
 
 | Architecture | Tag |
 | :----: | --- |
-| x86-64 | amd64 |
-| arm64 | arm64 |
-| armhf | arm |
+| x86-64 | linux-amd64 |
+| arm64 | linux-arm64 |
+| armhf | linux-arm-v7 |
 
 ## Migration
 
