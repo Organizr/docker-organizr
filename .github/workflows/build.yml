@@ -91,7 +91,7 @@ jobs:
           IMAGE=$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')
           SOURCE=${IMAGE}
 
-          docker manifest create ${IMAGE}:latest-    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest-
+          docker manifest create ${IMAGE}:latest    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest
 
       - name: Create manifests for GitHub Container Registry
         env:
@@ -100,4 +100,4 @@ jobs:
           IMAGE=ghcr.io/$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')
           SOURCE=${IMAGE}
 
-          docker manifest create ${IMAGE}:latest-    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest-
+          docker manifest create ${IMAGE}:latest    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest
