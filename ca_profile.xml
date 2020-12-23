@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Maintainer>
+  <Icon>https://raw.githubusercontent.com/causefx/Organizr/v2-master/plugins/images/organizr/logo-no-border.png</Icon>
+  <Profile>
+    Creating official Docker images for the Organizr application.
+  </Profile>
+  <WebPage>https://organizr.app/</WebPage>
+  <Discord>https://organizr.app/discord</Discord>
+  <DonateLink>https://paypal.me/causefx</DonateLink>
+  <DonateText>If you like my work please consider Donating.</DonateText>
+</Maintainer>
