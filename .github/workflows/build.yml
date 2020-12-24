@@ -56,6 +56,8 @@ jobs:
           push: true
           platforms: ${{ steps.vars.outputs.platform }}
           file: ./Dockerfile
+          build-args: |
+            ARCH=${{ matrix.architecture }}
           tags: |
             ${{ steps.vars.outputs.tag }}
             ghcr.io/${{ steps.vars.outputs.tag }}
