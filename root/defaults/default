@@ -1,4 +1,4 @@
-# V0.0.4
+# V0.0.5
 server {
   listen 80 default_server;
   root /config/www/organizr;
@@ -28,7 +28,7 @@ server {
 
   location ~ \.php$ {
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_pass unix:/var/run/php7-fpm.sock;
     fastcgi_index index.php;
     include /etc/nginx/fastcgi_params;
     fastcgi_buffers 32 32k;
