@@ -45,7 +45,7 @@ elif [[ ! -d /config/www/organizr/.git ]]; then
   mkdir -p /config/www/organizr
   git clone --progress --verbose -b "$(cat /Docker.txt)" https://github.com/causefx/Organizr /tmp/organizr || exit 1
 
-  mv -fu /tmp/organizr /config/www/organizr
+  mv -f /tmp/organizr /config/www/organizr
 
   rm -rf /tmp/organizr
 
