@@ -1,11 +1,10 @@
 # [organizr/organizr](https://github.com/organizr/docker-base)
 
-[![Layers](https://img.shields.io/microbadger/layers/organizr/organizr?color=402885&style=for-the-badge)](https://microbadger.com/images/organizr/organizr)
 [![Size](https://img.shields.io/docker/image-size/organizr/organizr?color=402885&style=for-the-badge)](https://hub.docker.com/r/organizr/organizr/)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/organizr/docker-organizr/Build%20Container?color=402885&style=for-the-badge&logo=github&logoColor=41add3)](https://github.com/organizr/docker-organizr/actions?query=workflow%3A%22Build+Container%22)
 [![Docker Pulls](https://img.shields.io/docker/pulls/organizr/organizr?color=402885&style=for-the-badge&logo=docker&logoColor=41add3)](https://hub.docker.com/r/organizr/organizr/)
 [![Discord Chat](https://img.shields.io/discord/374648602632388610?color=402885&logo=discord&logoColor=41add3&style=for-the-badge)](https://organizr.app/discord)
-[![Lisence](https://img.shields.io/github/license/organizr/docker-organizr?color=402885&style=for-the-badge)](LICENSE.md)
+[![License](https://img.shields.io/github/license/organizr/docker-organizr?color=402885&style=for-the-badge)](LICENSE.md)
 
 An HTPC/Homelab services organizer that is written in PHP.
 
@@ -14,16 +13,18 @@ An HTPC/Homelab services organizer that is written in PHP.
 ```bash
 docker create \
   --name=organizr \
-  -v <path to data>:/config \
-  -e PGID=<gid> -e PUID=<uid>  \
+  -v /path/to/data:/config \
+  -e PGID=1000 -e PUID=1000  \
   -p 80:80 \
   -e branch="v2-master" `#optional` \
-  organizr/organizr
+  ghcr.io/organizr/organizr
 ```
 
 This image is also available in GitHubs Container Registry at `ghcr.io/organizr/organizr`
 
 Entries marked with `optional` is showing the default value
+
+**Note:** Organizr is not contained inside the image, this means that using the built-in updater does not break your install. However the prefered way to update organizr is to restart the container, as we grab the latest commit on startup.
 
 ## Parameters
 
@@ -78,10 +79,10 @@ Key-changes:
 
 | Old | New |
 | ---- | --- |
-| `organizrtools/organizr-v2` | `organizr/organizr` |
-| `organizrtools/organizr-v2:dev` | `-e branch=dev organizr/organizr` |
-| `organizrtools/organizr-v2:php-fpm` | `organizr/organizr` |
-| `organizrtools/organizr-v2:dev-php-fpm` | `-e branch=dev organizr/organizr` |
+| `organizrtools/organizr-v2` | `ghcr.io/organizr/organizr` |
+| `organizrtools/organizr-v2:dev` | `-e branch=dev ghcr.io/organizr/organizr` |
+| `organizrtools/organizr-v2:php-fpm` | `ghcr.io/organizr/organizr` |
+| `organizrtools/organizr-v2:dev-php-fpm` | `-e branch=dev ghcr.io/organizr/organizr` |
 
 * `organizrtools/organizr-v2:plex` and `organizrtools/organizr-v2:dev-plex` does not have a migration path.
 
