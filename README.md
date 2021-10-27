@@ -20,8 +20,6 @@ docker create \
   ghcr.io/organizr/organizr
 ```
 
-This image is also available in GitHubs Container Registry at `ghcr.io/organizr/organizr`
-
 Entries marked with `optional` is showing the default value
 
 **Note:** Organizr is not contained inside the image, this means that using the built-in updater does not break your install. However the prefered way to update organizr is to restart the container, as we grab the latest commit on startup.
@@ -59,15 +57,15 @@ Manifested docker images built with buildkit.
 
 Supported architetures:
 
-| Architecture | Tag |
-| :----: | --- |
-| x86-64 | linux-amd64 |
-| arm64 | linux-arm64 |
-| armhf | linux-arm-v7 |
+| Architecture | Tag          |
+| :----------: | ------------ |
+|    x86-64    | linux-amd64  |
+|    arm64     | linux-arm64  |
+|    armhf     | linux-arm-v7 |
 
 ## Migration
 
-This should be a drop-in replacement coming from `organizrtools/organizr-v2`. It has worked in all our tests.
+This is a drop-in replacement coming from `organizrtools/organizr-v2`.
 
 Key-changes:
 
@@ -77,11 +75,11 @@ Key-changes:
 
 * One tag. ~~While we could have set PHP to use the unix socket as default, we opted to using a environment varible~~ We have now set up to use the unix socket exclusively. We also moved the branch selector to be a environment variable.
 
-| Old | New |
-| ---- | --- |
-| `organizrtools/organizr-v2` | `ghcr.io/organizr/organizr` |
-| `organizrtools/organizr-v2:dev` | `-e branch=dev ghcr.io/organizr/organizr` |
-| `organizrtools/organizr-v2:php-fpm` | `ghcr.io/organizr/organizr` |
+| Old                                     | New                                       |
+| --------------------------------------- | ----------------------------------------- |
+| `organizrtools/organizr-v2`             | `ghcr.io/organizr/organizr`               |
+| `organizrtools/organizr-v2:dev`         | `-e branch=dev ghcr.io/organizr/organizr` |
+| `organizrtools/organizr-v2:php-fpm`     | `ghcr.io/organizr/organizr`               |
 | `organizrtools/organizr-v2:dev-php-fpm` | `-e branch=dev ghcr.io/organizr/organizr` |
 
 * `organizrtools/organizr-v2:plex` and `organizrtools/organizr-v2:dev-plex` does not have a migration path.
