@@ -28,7 +28,7 @@ server {
 
   location ~ \.php$ {
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_pass unix:/var/run/php7-fpm.sock;
+    fastcgi_pass unix:/var/run/php8-fpm.sock;
     fastcgi_index index.php;
     include /etc/nginx/fastcgi_params;
     fastcgi_buffers 32 32k;
