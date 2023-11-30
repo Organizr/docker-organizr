@@ -49,6 +49,7 @@ elif [[ ! -d /config/www/organizr/.git ]]; then
     echo 'Failed to load Organizr repository folder'
     exit
   )
+  git config --global --add safe.directory /config/www/organizr
   git rev-parse HEAD >/config/www/organizr/Github.txt
 elif [[ -d /config/www/organizr/.git ]]; then
   echo '-----------------------'
