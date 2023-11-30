@@ -9,49 +9,50 @@ on:
 jobs:
   build:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         architecture: [linux-arm-v7, linux-arm64, linux-amd64]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Create VARS
         id: vars
         run: |
           ARCHITECTURE=${{ matrix.architecture }}
-          echo "::set-output name=platform::${ARCHITECTURE//-/\/}"
-          echo "::set-output name=repo::$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')"
-          echo "::set-output name=time::$(date --utc +%Y-%m-%d_%H)"
-          echo "::set-output name=source::${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_REF//refs\/heads\//}"
-          echo "::set-output name=url::${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/master/README.md"
-          echo "::set-output name=tag::$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]'):${{ matrix.architecture }}"
+          TIME=$(date --utc +%Y-%m-%d_%H)
+          echo "platform=${ARCHITECTURE//-/\/}" >> $GITHUB_OUTPUT
+          echo "repo=$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+          echo "time=$TIME" >> $GITHUB_OUTPUT
+          echo "source=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_REF//refs\/heads\//}" >> $GITHUB_OUTPUT
+          echo "url=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/master/README.md" >> $GITHUB_OUTPUT
+          echo "tag=$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]'):${{ matrix.architecture }}" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
         with:
           install: true
           version: latest
           driver-opts: image=moby/buildkit:master
 
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: roxedus
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: roxedus
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           push: true
           platforms: ${{ steps.vars.outputs.platform }}
@@ -67,20 +68,20 @@ jobs:
             org.opencontainers.image.url=${{ steps.vars.outputs.url }}
 
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: roxedus
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: roxedus
@@ -93,7 +94,7 @@ jobs:
           IMAGE=$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')
           SOURCE=${IMAGE}
 
-          docker manifest create ${IMAGE}:latest    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest
+          docker buildx imagetools create -t ${IMAGE}:latest ${SOURCE}:linux-amd64 ${SOURCE}:linux-arm-v7 ${SOURCE}:linux-arm64
 
       - name: Create manifests for GitHub Container Registry
         env:
@@ -102,4 +103,4 @@ jobs:
           IMAGE=ghcr.io/$(echo ${GITHUB_REPOSITORY//docker-/} | tr '[:upper:]' '[:lower:]')
           SOURCE=${IMAGE}
 
-          docker manifest create ${IMAGE}:latest    --amend ${SOURCE}:linux-amd64 --amend ${SOURCE}:linux-arm-v7 --amend ${SOURCE}:linux-arm64 && docker manifest push ${IMAGE}:latest
+          docker buildx imagetools create -t ${IMAGE}:latest ${SOURCE}:linux-amd64 ${SOURCE}:linux-arm-v7 ${SOURCE}:linux-arm64

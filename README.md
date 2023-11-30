@@ -1,7 +1,6 @@
 # [organizr/organizr](https://github.com/organizr/docker-base)
 
 [![Size](https://img.shields.io/docker/image-size/organizr/organizr?color=402885&style=for-the-badge)](https://hub.docker.com/r/organizr/organizr/)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/organizr/docker-organizr/Build%20Container?color=402885&style=for-the-badge&logo=github&logoColor=41add3)](https://github.com/organizr/docker-organizr/actions?query=workflow%3A%22Build+Container%22)
 [![Docker Pulls](https://img.shields.io/docker/pulls/organizr/organizr?color=402885&style=for-the-badge&logo=docker&logoColor=41add3)](https://hub.docker.com/r/organizr/organizr/)
 [![Discord Chat](https://img.shields.io/discord/374648602632388610?color=402885&logo=discord&logoColor=41add3&style=for-the-badge)](https://organizr.app/discord)
 [![License](https://img.shields.io/github/license/organizr/docker-organizr?color=402885&style=for-the-badge)](LICENSE.md)
