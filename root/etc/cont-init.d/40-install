@@ -50,6 +50,7 @@ elif [[ ! -d /config/www/organizr/.git ]]; then
     exit
   )
   git config --global --add safe.directory /config/www
+  git config --global --add safe.directory /config/www/organizr
   git rev-parse HEAD >/config/www/organizr/Github.txt
 elif [[ -d /config/www/organizr/.git ]]; then
   echo '-----------------------'
@@ -59,6 +60,8 @@ elif [[ -d /config/www/organizr/.git ]]; then
     echo 'Failed to load Organizr repository folder'
     exit 0
   )
+  git config --global --add safe.directory /config/www
+  git config --global --add safe.directory /config/www/organizr
   git fetch
   git reset --hard origin/"$(cat /Docker.txt)"
   git checkout "$(cat /Docker.txt)"
