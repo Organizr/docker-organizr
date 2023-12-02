@@ -43,13 +43,13 @@ elif [[ ! -d /config/www/organizr/.git ]]; then
   echo '-----------------------'
   echo '| Installing Organizr |'
   echo '-----------------------'
-  mkdir -p /config/www
+  mkdir -p /config/www/organizr
   git clone --progress --verbose -b "$(cat /Docker.txt)" https://github.com/causefx/Organizr /config/www/organizr || exit 1
   cd /config/www/organizr || (
     echo 'Failed to load Organizr repository folder'
     exit
   )
-  git config --global --add safe.directory /config/www/organizr
+  git config --global --add safe.directory /config/www
   git rev-parse HEAD >/config/www/organizr/Github.txt
 elif [[ -d /config/www/organizr/.git ]]; then
   echo '-----------------------'
