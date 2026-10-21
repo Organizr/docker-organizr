@@ -1,14 +1,6 @@
 #!/command/with-contenv bash
 # shellcheck shell=bash
 
-# Set repo owner (causefx or metalcated), default to causefx
-repo_owner="${repo_owner:-causefx}"
-if [ "$repo_owner" != "causefx" ] && [ "$repo_owner" != "metalcated" ]; then
-  echo "Invalid repo_owner '$repo_owner', using causefx"
-  repo_owner="causefx"
-fi
-echo "Using repository: https://github.com/${repo_owner}/Organizr"
-
 if [ "$branch" == "v2-develop" ] || [ "$branch" == "develop" ] || [ "$branch" == "dev" ]; then
   echo "v2-develop" >/Docker.txt
 elif [ "$branch" == "v2-master" ] || [ "$branch" == "master" ]; then
@@ -52,7 +44,7 @@ elif [[ ! -d /config/www/organizr/.git ]]; then
   echo '| Installing Organizr |'
   echo '-----------------------'
   mkdir -p /config/www/organizr
-  git clone --progress --verbose -b "$(cat /Docker.txt)" "https://github.com/${repo_owner}/Organizr" /config/www/organizr || exit 1
+  git clone --progress --verbose -b "$(cat /Docker.txt)" "https://github.com/causefx/Organizr" /config/www/organizr || exit 1
   cd /config/www/organizr || (
     echo 'Failed to load Organizr repository folder'
     exit
@@ -70,13 +62,6 @@ elif [[ -d /config/www/organizr/.git ]]; then
   )
   git config --global --add safe.directory /config/www
   git config --global --add safe.directory /config/www/organizr
-  # Update remote URL if repo_owner changed
-  current_remote=$(git remote get-url origin 2>/dev/null)
-  expected_remote="https://github.com/${repo_owner}/Organizr"
-  if [ "$current_remote" != "$expected_remote" ]; then
-    echo "Switching remote from $current_remote to $expected_remote"
-    git remote set-url origin "$expected_remote"
-  fi
   git fetch
   git reset --hard origin/"$(cat /Docker.txt)"
   git checkout "$(cat /Docker.txt)"
