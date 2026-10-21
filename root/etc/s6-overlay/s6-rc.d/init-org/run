@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 # shellcheck shell=bash
 
 if [ "$branch" == "v2-develop" ] || [ "$branch" == "develop" ] || [ "$branch" == "dev" ]; then
@@ -36,7 +36,7 @@ if [[ $(grep -c "location /api/v2 {" /config/nginx/site-confs/default) -eq 0 ]];
   printf "Api location for api version 2 is not found.\nPlease visit https://organizr.app/v2-api and follow the instructions.\n"
 fi
 
-# Fetch site or update existing
+# Fetch site or update existing
 if [ "$branch" == "manual" ]; then
   echo "Skipping update"
 elif [[ ! -d /config/www/organizr/.git ]]; then
@@ -44,7 +44,7 @@ elif [[ ! -d /config/www/organizr/.git ]]; then
   echo '| Installing Organizr |'
   echo '-----------------------'
   mkdir -p /config/www/organizr
-  git clone --progress --verbose -b "$(cat /Docker.txt)" https://github.com/causefx/Organizr /config/www/organizr || exit 1
+  git clone --progress --verbose -b "$(cat /Docker.txt)" "https://github.com/causefx/Organizr" /config/www/organizr || exit 1
   cd /config/www/organizr || (
     echo 'Failed to load Organizr repository folder'
     exit
@@ -68,7 +68,7 @@ elif [[ -d /config/www/organizr/.git ]]; then
   git reset --hard origin/"$(cat /Docker.txt)"
   git pull
   git rev-parse HEAD >/config/www/organizr/Github.txt
-elif ! ping -c 1 https://github.com &>/dev/null; then
+elif ! ping -c 1 github.com &>/dev/null; then
   echo "Git clone failed, but github is resolvable"
 else
   echo "Git clone failed"
@@ -93,6 +93,6 @@ cp /Docker.txt /config/www/organizr/Docker.txt || (
   exit 0
 )
 
-# Set Permissions
+# Set Permissions
 lsiown -R abc:abc \
   /config
