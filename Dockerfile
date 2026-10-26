@@ -1,6 +1,6 @@
 ARG BASE_IMAGE
 ARG ARCH
-FROM ${BASE_IMAGE:-ghcr.io/organizr/base:2026-10-21_21}-${ARCH:-linux-amd64}
+FROM ${BASE_IMAGE:-ghcr.io/organizr/base:2026-10-26_22}-${ARCH:-linux-amd64}
 
 LABEL maintainer="christronyxyocum,Roxedus"
 
